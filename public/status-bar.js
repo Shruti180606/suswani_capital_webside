@@ -29,17 +29,17 @@
     minute: '2-digit',
   });
 
-  const istClockFormatter = new Intl.DateTimeFormat('en-GB', {
+  const istClockFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Asia/Kolkata',
-    hour12: false,
+    hour12: true,
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
 
-  const londonClockFormatter = new Intl.DateTimeFormat('en-GB', {
+  const londonClockFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Europe/London',
-    hour12: false,
+    hour12: true,
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
