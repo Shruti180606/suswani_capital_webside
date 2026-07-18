@@ -1,0 +1,63 @@
+[
+  {
+    "id": "gold",
+    "label": "Gold",
+    "unit": "₹ / 10g",
+    "type": "metal",
+    "metalSymbol": "XAU",
+    "apiRoute": "/api/gold",
+    "tradingViewSymbol": "MCX:GOLD1!",
+    "description": "Live gold price, converted to Indian Rupees per 10 grams."
+  },
+  {
+    "id": "silver",
+    "label": "Silver",
+    "unit": "₹ / 10g",
+    "type": "metal",
+    "metalSymbol": "XAG",
+    "apiRoute": "/api/silver",
+    "tradingViewSymbol": "MCX:SILVER1!",
+    "description": "Live silver price, converted to Indian Rupees per 10 grams."
+  },
+  {
+    "id": "usd-inr",
+    "label": "USD / INR",
+    "unit": "₹",
+    "type": "forex",
+    "base": "USD",
+    "quote": "INR",
+    "apiRoute": "/api/usd-inr",
+    "tradingViewSymbol": "FX_IDC:USDINR",
+    "description": "Live US Dollar to Indian Rupee exchange rate."
+  },
+  {
+    "id": "sensex",
+    "label": "SENSEX",
+    "unit": "",
+    "type": "index",
+    "indexSymbol": "SENSEX",
+    "apiRoute": "/api/sensex",
+    "tradingViewSymbol": "BSE:SENSEX",
+    "description": "Live BSE SENSEX index."
+  },
+  {
+    "id": "nifty-50",
+    "label": "NIFTY 50",
+    "unit": "",
+    "type": "index",
+    "indexSymbol": "NIFTY50",
+    "apiRoute": "/api/nifty-50",
+    "tradingViewSymbol": "NSE:NIFTY",
+    "description": "Live NSE NIFTY 50 index."
+  },
+  {
+    "id": "bank-nifty",
+    "label": "BANK NIFTY",
+    "unit": "",
+    "type": "index",
+    "indexSymbol": "BANKNIFTY",
+    "apiRoute": "/api/bank-nifty",
+    "tradingViewSymbol": "NSE:BANKNIFTY",
+    "description": "Live NSE BANK NIFTY index."
+  }
+]

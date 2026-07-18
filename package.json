@@ -1,0 +1,20 @@
+{
+  "name": "suswani-capital",
+  "version": "1.0.0",
+  "description": "Suswani Capital — wealth management landing page with live market data.",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "generate": "node scripts/generate-pages.js",
+    "build": "npm run generate",
+    "start": "npm run generate && node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0"
+  }
+}

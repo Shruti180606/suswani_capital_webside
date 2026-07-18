@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Suswani Capital — Investments · Equities · Wealth</title>
+<meta name="description" content="Suswani Capital is a private wealth management and investment house. Live market data for gold, silver and USD/INR." />
+<link rel="icon" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header fade-in">
+  <a href="index.html" class="site-header__link">
+    <img class="site-header__logo" src="assets/logo.png" alt="Suswani Capital" />
+    <h1 class="site-header__name">Suswani Capital</h1>
+  </a>
+
+  <div class="status-bar" aria-live="polite">
+    <div class="status-bar__item status-bar__clock">
+      <span class="status-bar__label">IST</span>
+      <span class="status-bar__clock-text" data-field="ist-clock">—</span>
+    </div>
+    <div class="status-bar__item status-bar__clock">
+      <span class="status-bar__label">LONDON</span>
+      <span class="status-bar__clock-text" data-field="london-clock">—</span>
+    </div>
+    <div class="status-bar__item status-bar__market">
+      <span class="status-bar__label">LIVE MARKET STATUS</span>
+      <span class="status-bar__dot" data-field="market-dot"></span>
+      <span class="status-bar__market-text" data-field="market-text">—</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="markets">
+    <h2 class="markets__heading fade-in">Live Markets</h2>
+    <div id="index-cards-grid" class="cards-grid" aria-live="polite">
+      <!-- SENSEX / NIFTY 50 / BANK NIFTY cards, rendered by script.js from /api/config -->
+    </div>
+    <div id="cards-grid" class="cards-grid cards-grid--secondary" aria-live="polite">
+      <!-- Gold / Silver / USD-INR cards, rendered by script.js from /api/config -->
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; <span id="year"></span> Suswani Capital. Market data is indicative and may be delayed.</p>
+</footer>
+
+<script src="status-bar.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

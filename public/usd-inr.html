@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>USD / INR — Suswani Capital</title>
+<meta name="description" content="Live US Dollar to Indian Rupee exchange rate." />
+<link rel="icon" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body data-api-route="/api/usd-inr">
+
+<header class="site-header fade-in">
+  <a href="index.html" class="site-header__link">
+    <img class="site-header__logo" src="assets/logo.png" alt="Suswani Capital" />
+    <span class="site-header__name">Suswani Capital</span>
+  </a>
+
+  <div class="status-bar" aria-live="polite">
+    <div class="status-bar__item status-bar__clock">
+      <span class="status-bar__label">IST</span>
+      <span class="status-bar__clock-text" data-field="ist-clock">—</span>
+    </div>
+    <div class="status-bar__item status-bar__clock">
+      <span class="status-bar__label">LONDON</span>
+      <span class="status-bar__clock-text" data-field="london-clock">—</span>
+    </div>
+    <div class="status-bar__item status-bar__market">
+      <span class="status-bar__label">LIVE MARKET STATUS</span>
+      <span class="status-bar__dot" data-field="market-dot"></span>
+      <span class="status-bar__market-text" data-field="market-text">—</span>
+    </div>
+  </div>
+</header>
+
+<main class="detail">
+  <a class="detail__back" href="index.html">&larr; Back to markets</a>
+  <h1 class="detail__heading fade-in">USD / INR</h1>
+  <p class="detail__description fade-in">Live US Dollar to Indian Rupee exchange rate.</p>
+
+  <div class="detail__stat-row fade-in">
+    <p class="detail__price" data-field="price">Loading…</p>
+    <span class="card__unit">₹</span>
+    <span class="card__trend" data-field="trend"></span>
+    <span class="card__meta" data-field="updated"></span>
+  </div>
+
+  <div class="detail__chart fade-in">
+    <iframe
+      src="https://s.tradingview.com/widgetembed/?symbol=FX_IDC%3AUSDINR&interval=D&theme=dark&style=1&locale=en&toolbarbg=10253B"
+      title="USD / INR chart"
+      allowtransparency="true"
+      scrolling="no"
+      loading="lazy"
+    ></iframe>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; <span id="year"></span> Suswani Capital. Market data is indicative and may be delayed.</p>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="status-bar.js"></script>
+<script src="detail.js"></script>
+</body>
+</html>
