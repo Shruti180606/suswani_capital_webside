@@ -112,4 +112,21 @@
   setInterval(update, 30000);
   // The clocks display seconds, so they do need a per-second tick.
   setInterval(updateClocks, 1000);
+
+  // Some browsers pause/throttle CSS entrance animations (`.fade-in`, `.card`)
+  // on a backgrounded or otherwise non-visible tab. If that happens while the
+  // page loads, elements can be left stuck at their opacity: 0 starting state
+  // forever. Force the finished state after a few checkpoints so content is
+  // never permanently invisible — checked more than once since cards are
+  // appended asynchronously (after the /api/config fetch resolves) and may
+  // not exist in the DOM yet at the first checkpoint.
+  function revealStuckElements() {
+    document.querySelectorAll('.fade-in, .card').forEach((el) => {
+      if (getComputedStyle(el).opacity === '0') {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      }
+    });
+  }
+  [1000, 2000, 3500, 5000].forEach((delay) => setTimeout(revealStuckElements, delay));
 })();
