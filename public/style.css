@@ -110,6 +110,19 @@ img {
   color: #FFFFFF;
 }
 
+/* India is always the first status-bar item — targeted positionally since it
+   shares the same classes as the London item. */
+.status-bar > .status-bar__item:first-child .status-bar__label,
+.status-bar > .status-bar__item:first-child .status-bar__clock-text {
+  color: #D4AF37;
+}
+
+/* London is always the second status-bar item — same positional approach. */
+.status-bar > .status-bar__item:nth-child(2) .status-bar__label,
+.status-bar > .status-bar__item:nth-child(2) .status-bar__clock-text {
+  color: #A9C6E8;
+}
+
 .status-bar__dot {
   width: 8px;
   height: 8px;
