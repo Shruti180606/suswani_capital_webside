@@ -59,5 +59,32 @@
     "apiRoute": "/api/bank-nifty",
     "tradingViewSymbol": "NSE:BANKNIFTY",
     "description": "Live NSE BANK NIFTY index."
+  },
+  {
+    "id": "copper",
+    "label": "Copper",
+    "unit": "₹ / kg",
+    "type": "commodity",
+    "apiRoute": "/api/copper",
+    "tradingViewSymbol": "MCX:COPPER1!",
+    "description": "Live copper price, converted to Indian Rupees per kilogram."
+  },
+  {
+    "id": "zinc",
+    "label": "Zinc",
+    "unit": "₹ / kg",
+    "type": "commodity",
+    "apiRoute": "/api/zinc",
+    "tradingViewSymbol": "MCX:ZINC1!",
+    "description": "Live zinc price, converted to Indian Rupees per kilogram."
+  },
+  {
+    "id": "crude-oil",
+    "label": "Crude Oil",
+    "unit": "₹ / barrel",
+    "type": "commodity",
+    "apiRoute": "/api/crude-oil",
+    "tradingViewSymbol": "MCX:CRUDEOIL1!",
+    "description": "Live WTI crude oil price, converted to Indian Rupees per barrel."
   }
 ]
