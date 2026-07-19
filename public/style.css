@@ -103,12 +103,30 @@ img {
 
 .status-bar__market {
   gap: 0.5rem;
+  flex-basis: 100%;
+  order: 3;
+  margin-top: 4px;
 }
 
 .status-bar__label {
   letter-spacing: 0.05em;
   color: #FFFFFF;
 }
+
+.status-bar__flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.flag-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 
 /* India is always the first status-bar item — targeted positionally since it
    shares the same classes as the London item. */
