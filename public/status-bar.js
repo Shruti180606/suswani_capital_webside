@@ -37,25 +37,26 @@
     second: '2-digit',
   });
 
-  const londonClockFormatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Europe/London',
-    hour12: true,
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+ const usClockFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/New_York',
+  hour12: true,
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+});
   });
 
   // Separate formatter (rather than parsing the clock string) so the London
   // label correctly flips between BST and GMT across the DST transition.
-  const londonZoneFormatter = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/London',
-    timeZoneName: 'short',
-  });
+  const usZoneFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/New_York',
+  timeZoneName: 'short',
+});
 
-  function getLondonZoneAbbr(date) {
-    const part = londonZoneFormatter.formatToParts(date).find((p) => p.type === 'timeZoneName');
-    return part ? part.value : 'UK';
-  }
+function getUsZoneAbbr(date) {
+  const part = usZoneFormatter.formatToParts(date).find((p) => p.type === 'timeZoneName');
+  return part ? part.value : 'US';
+}
 
   function getIstParts(date) {
     const map = {};
@@ -93,14 +94,14 @@
   }
 
   function updateClocks() {
-    const istEl = document.querySelector('[data-field="ist-clock"]');
-    const londonEl = document.querySelector('[data-field="london-clock"]');
-    if (!istEl || !londonEl) return;
+  const istEl = document.querySelector('[data-field="ist-clock"]');
+  const usEl = document.querySelector('[data-field="us-clock"]');
+  if (!istEl || !usEl) return;
 
-    const now = new Date();
-    istEl.textContent = `${istClockFormatter.format(now)} IST`;
-    londonEl.textContent = `${londonClockFormatter.format(now)} ${getLondonZoneAbbr(now)}`;
-  }
+  const now = new Date();
+  istEl.textContent = `${istClockFormatter.format(now)} IST`;
+  usEl.textContent = `${usClockFormatter.format(now)} ${getUsZoneAbbr(now)}`;
+}
 
   // Load the holiday list before the first paint so market status is correct
   // immediately, rather than flashing an un-holiday-aware status for a moment.
