@@ -44,7 +44,7 @@
   minute: '2-digit',
   second: '2-digit',
 });
-  });
+  
 
   // Separate formatter (rather than parsing the clock string) so the London
   // label correctly flips between BST and GMT across the DST transition.
