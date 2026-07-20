@@ -18,8 +18,10 @@
     <img class="site-header__logo" src="assets/logo.png" alt="Suswani Capital" />
     <h1 class="site-header__name">Suswani Capital</h1>
   </a>
-
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light and dark mode">🌙</button>
+  
   <div class="status-bar" aria-live="polite">
+
     <div class="status-bar__clocks-row">
     <div class="status-bar__item status-bar__clock">
      <span class="status-bar__flag"><img src="https://flagcdn.com/w40/in.png" alt="India" class="flag-icon"></span>
@@ -39,6 +41,13 @@
   </div>
 </header>
 
+<nav class="site-nav">
+  <a href="index.html" class="site-nav__link">Live Rates</a>
+  <a href="about.html" class="site-nav__link">About Us</a>
+  <a href="services.html" class="site-nav__link">Services</a>
+  <a href="contact.html" class="site-nav__link">Contact Us</a>
+</nav>
+
 <main>
   <section class="markets">
     <h2 class="markets__heading fade-in">Live Markets</h2>
@@ -57,5 +66,19 @@
 
 <script src="status-bar.js"></script>
 <script src="script.js"></script>
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    themeToggle.textContent = '☀️';
+  }
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    themeToggle.textContent = isLight ? '☀️' : '🌙';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  });
+</script>
 </body>
 </html>

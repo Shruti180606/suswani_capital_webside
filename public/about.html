@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About Us — Suswani Capital</title>
+<meta name="description" content="Learn about Suswani Capital, a private wealth management and investment firm." />
+<link rel="icon" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header fade-in">
+  <a href="index.html" class="site-header__link">
+    <img class="site-header__logo" src="assets/logo.png" alt="Suswani Capital" />
+    <h1 class="site-header__name">Suswani Capital</h1>
+  </a>
+
+  <div class="status-bar" aria-live="polite">
+    <div class="status-bar__clocks-row">
+      <div class="status-bar__item status-bar__clock">
+        <span class="status-bar__flag"><img src="https://flagcdn.com/w40/in.png" alt="India" class="flag-icon"></span>
+        <span class="status-bar__clock-text" data-field="ist-clock">–</span>
+      </div>
+      <div class="status-bar__item status-bar__clock">
+        <span class="status-bar__flag"><img src="https://flagcdn.com/w40/us.png" alt="United States" class="flag-icon"></span>
+        <span class="status-bar__clock-text" data-field="us-clock">–</span>
+      </div>
+    </div>
+    <div class="status-bar__item status-bar__market">
+      <span class="status-bar__label">LIVE MARKET STATUS</span>
+      <span class="status-bar__dot" data-field="market-dot"></span>
+      <span class="status-bar__market-text" data-field="market-text">–</span>
+    </div>
+  </div>
+</header>
+
+<nav class="site-nav">
+  <a href="index.html" class="site-nav__link">Live Rates</a>
+  <a href="about.html" class="site-nav__link">About Us</a>
+  <a href="services.html" class="site-nav__link">Services</a>
+  <a href="contact.html" class="site-nav__link">Contact Us</a>
+</nav>
+
+<main>
+  <section class="page-section">
+    <h2 class="page-section__heading fade-in">About Us</h2>
+    <p class="page-section__text">
+      Suswani Capital is a private wealth management and investment firm dedicated to helping clients grow and protect their wealth. With a focus on equities, portfolio management, and long-term financial planning, we combine market expertise with a client-first approach to deliver thoughtful, disciplined investment strategies.
+    </p>
+    <p class="page-section__text">
+      Our mission is simple: to help individuals and families build lasting financial security through informed, transparent, and personalized investment guidance.
+    </p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; <span id="year"></span> Suswani Capital. Market data is indicative and may be delayed.</p>
+</footer>
+
+<script src="status-bar.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
