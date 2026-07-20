@@ -68,6 +68,11 @@ function renderCardData(instrument, data) {
   if (typeof data.previous === 'number' && data.previous !== data.price) {
     const trend = document.createElement('span');
     const isUp = data.price > data.previous;
+
+    priceEl.classList.remove('flash-up', 'flash-down');
+    void priceEl.offsetWidth; // forces reflow so the animation replays even if triggered again quickly
+    priceEl.classList.add(isUp ? 'flash-up' : 'flash-down');
+    
     trend.className = `card__trend ${isUp ? 'up' : 'down'}`;
     trend.textContent = isUp ? '▲ up' : '▼ down';
     priceEl.insertAdjacentElement('afterend', trend);
