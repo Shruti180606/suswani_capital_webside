@@ -27,7 +27,6 @@ async function fromMetalPriceApi(metalSymbol) {
   const data = await res.json();
   if (data.success === false) throw new Error('MetalpriceAPI returned an error response');
 
-  // base=<metal> convention: rates.INR is the INR value of 1 troy ounce of the metal.
   const pricePerOunce = data.rates.INR;
   return (pricePerOunce / GRAMS_PER_TROY_OUNCE) * 10;
 }

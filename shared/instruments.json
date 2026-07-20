@@ -30,6 +30,7 @@
     "tradingViewSymbol": "FX_IDC:USDINR",
     "description": "Live US Dollar to Indian Rupee exchange rate."
   },
+
   {
     "id": "sensex",
     "label": "SENSEX",

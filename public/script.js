@@ -34,6 +34,7 @@ function buildCard(instrument, index) {
   card.innerHTML = `
     <p class="card__label">${instrument.label}</p>
     <p class="card__price is-loading" data-field="price">Loading…</p>
+    
     <p class="card__unit">${instrument.unit}</p>
     <p class="card__meta">
       <span data-field="updated"></span>
@@ -41,6 +42,11 @@ function buildCard(instrument, index) {
     </p>
   `;
   return card;
+}
+function flashPrice(el, isUp) {
+  el.classList.remove('flash-up', 'flash-down');
+  void el.offsetWidth;
+  el.classList.add(isUp ? 'flash-up' : 'flash-down');
 }
 
 function renderCardData(instrument, data) {
@@ -60,22 +66,31 @@ function renderCardData(instrument, data) {
   }
 
   priceEl.classList.remove('is-loading');
-  priceEl.textContent = formatPrice(data.price);
+  priceEl.textContent = formatPrice(data.priceInr ?? data.price);
 
   const existingTrend = card.querySelector('.card__trend');
   if (existingTrend) existingTrend.remove();
 
-  if (typeof data.previous === 'number' && data.previous !== data.price) {
-    const trend = document.createElement('span');
-    const isUp = data.price > data.previous;
+  const mainPrice = data.priceInr ?? data.price;
+const mainPrevious = data.previousInr ?? data.previous;
 
-    priceEl.classList.remove('flash-up', 'flash-down');
-    void priceEl.offsetWidth; // forces reflow so the animation replays even if triggered again quickly
-    priceEl.classList.add(isUp ? 'flash-up' : 'flash-down');
-    
+if (typeof mainPrevious === 'number' && mainPrevious !== mainPrice) {
+  const trend = document.createElement('span');
+  const isUp = mainPrice > mainPrevious;
+
+   flashPrice(priceEl, isUp);
+
     trend.className = `card__trend ${isUp ? 'up' : 'down'}`;
     trend.textContent = isUp ? '▲ up' : '▼ down';
     priceEl.insertAdjacentElement('afterend', trend);
+  }
+  const secondaryEl = card.querySelector('[data-field="price-secondary"]');
+  if (secondaryEl && typeof data.priceUsd === 'number') {
+    secondaryEl.style.display = '';
+    if (typeof data.previousUsd === 'number' && data.previousUsd !== data.priceUsd) {
+      flashPrice(secondaryEl, data.priceUsd > data.previousUsd);
+    }
+    secondaryEl.textContent = `≈ $${data.priceUsd.toFixed(4)}`;
   }
 
   updatedEl.textContent = `Last updated ${formatTime(data.updatedAt)}`;

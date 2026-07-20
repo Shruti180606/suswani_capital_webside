@@ -272,6 +272,13 @@ img {
   transform: translateY(12px);
   animation: card-in 0.6s ease forwards;
 }
+.card__price--secondary {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: -0.5rem;
+  opacity: 0.85;
+}
 .card__price.flash-up {
   animation: flash-green 0.8s ease;
 }

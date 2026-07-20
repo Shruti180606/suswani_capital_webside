@@ -21,4 +21,5 @@ router.use('/', require('./forex'));
 router.use('/', require('./indices'));
 router.use('/', require('./commodities'));
 
+
 module.exports = router;
