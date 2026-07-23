@@ -1,52 +1,54 @@
 const express = require('express');
 const instruments = require('../../shared/instruments.json');
 const cache = require('../services/cache');
-const {
-  getCopperPricePerKg,
-  getZincPricePerKg,
-  getCrudeOilPricePerBarrel,
-} = require('../services/commodities');
-
+const { getCommodityQuote } = require('../services/commodities');
 const router = express.Router();
 
-function fetchCommodityPrice(instrument) {
-  if (instrument.id === 'copper') return getCopperPricePerKg();
-  if (instrument.id === 'zinc') return getZincPricePerKg();
-  if (instrument.id === 'crude-oil') return getCrudeOilPricePerBarrel();
-  throw new Error(`Unknown commodity id: ${instrument.id}`);
+function nameForId(id) {
+  if (id === 'copper') return 'COPPER';
+  if (id === 'zinc') return 'ZINC';
+  if (id === 'crude-oil') return 'CRUDEOIL';
+  throw new Error(`Unknown commodity id: ${id}`);
+}
+
+function formatExpiry(raw) {
+  if (!raw) return '';
+  const day = raw.slice(0, 2);
+  const monRaw = raw.slice(2, 5);
+  const mon = monRaw.charAt(0) + monRaw.slice(1).toLowerCase();
+  return `${day} ${mon}`;
 }
 
 instruments
   .filter((instrument) => instrument.type === 'commodity')
   .forEach((instrument) => {
     const routePath = instrument.apiRoute.replace(/^\/api/, '');
-
     router.get(routePath, async (req, res) => {
-      const previous = cache.getFresh(instrument.id);
       try {
-        const price = await fetchCommodityPrice(instrument);
-        cache.set(instrument.id, { price, unit: instrument.unit });
-        res.json({
+        const q = await getCommodityQuote(nameForId(instrument.id));
+        const payload = {
           id: instrument.id,
           label: instrument.label,
           unit: instrument.unit,
-          price,
-          previous: previous ? previous.price : null,
+          expiry: formatExpiry(q.expiry),
+          ltp: q.ltp,
+          price: q.ltp,
+          netChange: q.netChange,
+          percentChange: q.percentChange,
+          bid: q.bid,
+          ask: q.ask,
+          open: q.open,
+          high: q.high,
+          low: q.low,
           updatedAt: Date.now(),
           stale: false,
-        });
+        };
+        cache.set(instrument.id, payload);
+        res.json(payload);
       } catch (err) {
         const stale = cache.getStale(instrument.id);
         if (stale) {
-          res.json({
-            id: instrument.id,
-            label: instrument.label,
-            unit: stale.unit,
-            price: stale.price,
-            previous: null,
-            updatedAt: stale.fetchedAt,
-            stale: true,
-          });
+          res.json(stale);
         } else {
           res.status(502).json({
             id: instrument.id,

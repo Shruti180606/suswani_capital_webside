@@ -1,7 +1,7 @@
 [
   {
     "id": "gold",
-    "label": "Gold",
+    "label": "Gold Future",
     "unit": "₹ / 10g",
     "type": "metal",
     "metalSymbol": "XAU",
@@ -11,8 +11,8 @@
   },
   {
     "id": "silver",
-    "label": "Silver",
-    "unit": "₹ / 10g",
+    "label": "Silver Future",
+    "unit": "₹ / 1kg",
     "type": "metal",
     "metalSymbol": "XAG",
     "apiRoute": "/api/silver",
@@ -63,7 +63,7 @@
   },
   {
     "id": "copper",
-    "label": "Copper",
+    "label": "Copper Future",
     "unit": "₹ / kg",
     "type": "commodity",
     "apiRoute": "/api/copper",
@@ -72,7 +72,7 @@
   },
   {
     "id": "zinc",
-    "label": "Zinc",
+    "label": "Zinc Future",
     "unit": "₹ / kg",
     "type": "commodity",
     "apiRoute": "/api/zinc",
@@ -81,7 +81,7 @@
   },
   {
     "id": "crude-oil",
-    "label": "Crude Oil",
+    "label": "Crude Oil Future",
     "unit": "₹ / barrel",
     "type": "commodity",
     "apiRoute": "/api/crude-oil",

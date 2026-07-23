@@ -13,6 +13,12 @@
 </head>
 <body>
 
+<div class="ticker-wrap">
+  <div class="ticker-content">
+    <span>Welcome to Suswani Capital &mdash; your trusted partner in wealth management. We deal in Equities, F&amp;O, Commodities (MCX &amp; Comex), and Currency trading, backed by expert guidance and live market insights.</span>
+    <span>सुस्वानी कैपिटल में आपका स्वागत है &mdash; वेल्थ मैनेजमेंट में आपका भरोसेमंद साथी। हम इक्विटी, एफ एंड ओ, कमोडिटी (एमसीएक्स और कॉमेक्स), और करेंसी ट्रेडिंग में काम करते हैं, विशेषज्ञ मार्गदर्शन और लाइव मार्केट जानकारी के साथ।</span>
+  </div>
+</div>
 <header class="site-header fade-in">
   <a href="index.html" class="site-header__link">
     <img class="site-header__logo" src="assets/logo.png" alt="Suswani Capital" />
@@ -40,7 +46,6 @@
     </div>
   </div>
 </header>
-
 <nav class="site-nav">
   <a href="index.html" class="site-nav__link">Live Rates</a>
   <a href="about.html" class="site-nav__link">About Us</a>
@@ -54,14 +59,26 @@
     <div id="index-cards-grid" class="cards-grid" aria-live="polite">
       <!-- SENSEX / NIFTY 50 / BANK NIFTY cards, rendered by script.js from /api/config -->
     </div>
-    <div id="cards-grid" class="cards-grid cards-grid--secondary" aria-live="polite">
+    <table id="metals-table" class="metals-table" aria-live="polite">
+      <thead>
+        <tr>
+          <th>PRODUCT</th>
+          <th>CURRENT</th>
+          <th>BID</th>
+          <th>ASK</th>
+          <th>HIGH</th>
+          <th>LOW</th>
+        </tr>
+      </thead>
+      <tbody id="metals-table-body"></tbody>
+    </table>
       <!-- Gold / Silver / USD-INR cards, rendered by script.js from /api/config -->
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
-  <p>&copy; <span id="year"></span> Suswani Capital. Market data is indicative and may be delayed.</p>
+  <p>&copy; <span id="year"></span> Suswani Capital..</p>
 </footer>
 
 <script src="status-bar.js"></script>

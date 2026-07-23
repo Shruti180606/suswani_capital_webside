@@ -1,40 +1,44 @@
-// Converts a live spot price for a precious metal into INR per 10 grams.
-// Provider priority: GoldAPI.io (GOLDAPI_KEY) first, MetalpriceAPI (METALPRICEAPI_KEY) as fallback.
-const GRAMS_PER_TROY_OUNCE = 31.1034768;
+const { getQuoteMap } = require('../getQuotes');
 
-async function fromGoldApi(metalSymbol) {
-  const res = await fetch(`https://www.goldapi.io/api/${metalSymbol}/INR`, {
-    headers: {
-      'x-access-token': process.env.GOLDAPI_KEY,
-      'Content-Type': 'application/json',
-    },
-  });
-  if (!res.ok) throw new Error(`GoldAPI request failed: ${res.status}`);
-  const data = await res.json();
-
-  const pricePerGram =
-    typeof data.price_gram_24k === 'number'
-      ? data.price_gram_24k
-      : data.price / GRAMS_PER_TROY_OUNCE;
-
-  return pricePerGram * 10;
+function extractDepth(q) {
+  const buy = q.depth && q.depth.buy && q.depth.buy[0] ? q.depth.buy[0].price : null;
+  const sell = q.depth && q.depth.sell && q.depth.sell[0] ? q.depth.sell[0].price : null;
+  return { bid: buy, ask: sell };
 }
 
-async function fromMetalPriceApi(metalSymbol) {
-  const url = `https://api.metalpriceapi.com/v1/latest?api_key=${process.env.METALPRICEAPI_KEY}&base=${metalSymbol}&currencies=INR`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`MetalpriceAPI request failed: ${res.status}`);
-  const data = await res.json();
-  if (data.success === false) throw new Error('MetalpriceAPI returned an error response');
+function buildQuote(q, divisor) {
+  const { bid, ask } = extractDepth(q);
+  return {
+    ltp: q.ltp != null ? q.ltp / divisor : null,
+    open: q.open != null ? q.open / divisor : null,
+    high: q.high != null ? q.high / divisor : null,
+    low: q.low != null ? q.low / divisor : null,
+    bid: bid != null ? bid / divisor : null,
+    ask: ask != null ? ask / divisor : null,
+    netChange: q.netChange != null ? q.netChange / divisor : null,
+    percentChange: q.percentChange != null ? q.percentChange : null,
+    expiry: q.expiry || null,
+  };
+}
 
-  const pricePerOunce = data.rates.INR;
-  return (pricePerOunce / GRAMS_PER_TROY_OUNCE) * 10;
+async function getMetalQuote(metalSymbol) {
+  const quotes = await getQuoteMap();
+  if (metalSymbol === 'XAU') {
+    const q = quotes.GOLD;
+    if (!q) throw new Error('No live quote available for Gold');
+    return buildQuote(q, 1);
+  }
+  if (metalSymbol === 'XAG') {
+    const q = quotes.SILVER;
+    if (!q) throw new Error('No live quote available for Silver');
+    return buildQuote(q, 1);
+  }
+  throw new Error(`Unsupported metal symbol: ${metalSymbol}`);
 }
 
 async function getMetalPricePer10g(metalSymbol) {
-  if (process.env.GOLDAPI_KEY) return fromGoldApi(metalSymbol);
-  if (process.env.METALPRICEAPI_KEY) return fromMetalPriceApi(metalSymbol);
-  throw new Error('No metals API key configured (set GOLDAPI_KEY or METALPRICEAPI_KEY)');
+  const quote = await getMetalQuote(metalSymbol);
+  return quote.ltp;
 }
 
-module.exports = { getMetalPricePer10g };
+module.exports = { getMetalQuote, getMetalPricePer10g };

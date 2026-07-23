@@ -1,5 +1,5 @@
-const REFRESH_INTERVAL_MS = 4 * 60 * 1000; // 4 minutes
-const INDEX_REFRESH_INTERVAL_MS = 60 * 1000; // 1 minute
+const REFRESH_INTERVAL_MS = 2 * 1000; // 2 seconds
+const INDEX_REFRESH_INTERVAL_MS = 2 * 1000; // 2 seconds
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -187,8 +187,8 @@ async function init() {
   const res = await fetch('/api/config');
   const instruments = await res.json();
 
-  const standardInstruments = instruments.filter((instrument) => instrument.type !== 'index');
-  const indexInstruments = instruments.filter((instrument) => instrument.type === 'index');
+  const standardInstruments = instruments.filter((instrument) => instrument.type !== 'index' && instrument.id !== 'gold' && instrument.id !== 'silver' && instrument.id !== 'copper' && instrument.id !== 'zinc' && instrument.id !== 'crude-oil' && instrument.id !== 'usd-inr');
+  const indexInstruments = [];
 
   // Rendered as two separate groups (indices, then metals/forex) so the grouping
   // holds regardless of screen width, rather than relying on grid wrap order.
@@ -211,3 +211,121 @@ async function init() {
 }
 
 init();
+const previousValues = {};
+
+function flashBadge(el, dir) {
+  el.classList.remove('flash-up', 'flash-down');
+  void el.offsetWidth;
+  el.classList.add(dir === 'up' ? 'flash-up' : 'flash-down');
+  setTimeout(() => el.classList.remove('flash-up', 'flash-down'), 700);
+}
+
+const METALS_COMMODITIES_ROUTES = ['/api/gold', '/api/silver', '/api/crude-oil', '/api/copper', '/api/zinc'];
+
+function buildMetalRow(item) {
+  const row = document.createElement('tr');
+  const ltp = item.ltp !== undefined ? item.ltp : item.price;
+  const change = item.netChange;
+  const pct = item.percentChange;
+  const hasChangeData = change !== undefined && change !== null;
+  const dir = hasChangeData ? (change > 0 ? 'up' : change < 0 ? 'down' : 'flat') : 'flat';
+  const sign = hasChangeData && change > 0 ? '+' : '';
+  const hasBidAsk = item.bid != null && item.ask != null;
+
+  row.innerHTML = `
+    <td class="product-cell">${item.label}${item.expiry ? ` <span class="product-expiry">${item.expiry}</span>` : ''}<span class="product-change change--${dir}">${hasChangeData ? `${sign}${formatSigned(change)} (${sign}${pct != null ? pct.toFixed(2) : '0.00'}%)` : '—'}</span></td>
+    <td><span class="price-cell price-cell--ltp" id="ltp-${item.id}">${formatPrice(ltp)}</span></td>
+    <td>${hasBidAsk ? `<span class="price-cell" id="bid-${item.id}">${formatPrice(item.bid)}</span>` : '—'}</td>
+    <td>${hasBidAsk ? `<span class="price-cell" id="ask-${item.id}">${formatPrice(item.ask)}</span>` : '—'}</td>
+    <td class="ohl-cell">${item.high != null ? formatPrice(item.high) : '—'}</td>
+    <td class="ohl-cell">${item.low != null ? formatPrice(item.low) : '—'}</td>
+  `;
+
+  const prev = previousValues[item.id] || {};
+  requestAnimationFrame(() => {
+    const ltpEl = row.querySelector(`#ltp-${item.id}`);
+    const bidEl = row.querySelector(`#bid-${item.id}`);
+    const askEl = row.querySelector(`#ask-${item.id}`);
+    if (prev.ltp !== undefined && prev.ltp !== ltp && ltpEl) flashBadge(ltpEl, ltp > prev.ltp ? 'up' : 'down');
+    if (prev.bid !== undefined && prev.bid !== item.bid && bidEl) flashBadge(bidEl, item.bid > prev.bid ? 'up' : 'down');
+    if (prev.ask !== undefined && prev.ask !== item.ask && askEl) flashBadge(askEl, item.ask > prev.ask ? 'up' : 'down');
+  });
+  previousValues[item.id] = { ltp, bid: item.bid, ask: item.ask };
+
+  return row;
+}
+
+async function renderMetalsCommodities() {
+  const tbody = document.getElementById('metals-table-body');
+  if (!tbody) return;
+  const results = await Promise.all(METALS_COMMODITIES_ROUTES.map(async (route) => {
+    try {
+      const res = await fetch(route);
+      return await res.json();
+    } catch (e) {
+      return { error: e.message };
+    }
+  }));
+  tbody.innerHTML = '';
+  results.forEach((item) => {
+    if (item.error) return;
+    tbody.appendChild(buildMetalRow(item));
+  });
+}
+
+renderMetalsCommodities();
+setInterval(renderMetalsCommodities, 2000);
+const INDEX_ROUTES = ['/api/sensex', '/api/nifty-50', '/api/bank-nifty'];
+
+function buildLiveIndexCard(item) {
+  const card = document.createElement('div');
+  card.className = 'metal-card';
+  const ltp = item.lastPrice;
+  const change = item.change;
+  const pct = item.changePercent;
+  const hasChangeData = change !== undefined && change !== null;
+  const dir = hasChangeData ? (change > 0 ? 'up' : change < 0 ? 'down' : 'flat') : 'flat';
+  const sign = hasChangeData && change > 0 ? '+' : '';
+
+  card.innerHTML = `
+    <div class="metal-card__left">
+      <div><span class="metal-card__symbol">${item.label}</span></div>
+      <div class="metal-card__ltp" id="ltp-${item.id}">${formatPrice(ltp)}</div>
+      <div class="metal-card__change metal-card__change--${dir}">${hasChangeData ? `${sign}${formatSigned(change)} (${sign}${pct != null ? pct.toFixed(2) : '0.00'}%)` : '—'}</div>
+    </div>
+    <div class="metal-card__right">
+      <div class="metal-card__ohl">O:${formatPrice(item.open)} H:${formatPrice(item.high)} L:${formatPrice(item.low)}</div>
+      <div class="metal-card__ohl">Prev Close: ${formatPrice(item.prevClose)}</div>
+    </div>
+  `;
+
+  const prev = previousValues[item.id] || {};
+  requestAnimationFrame(() => {
+    const ltpEl = card.querySelector(`#ltp-${item.id}`);
+    if (prev.ltp !== undefined && prev.ltp !== ltp && ltpEl) flashBadge(ltpEl, ltp > prev.ltp ? 'up' : 'down');
+  });
+  previousValues[item.id] = { ltp };
+
+  return card;
+}
+
+async function renderIndices() {
+  const grid = document.getElementById('index-cards-grid');
+  if (!grid) return;
+  const results = await Promise.all(INDEX_ROUTES.map(async (route) => {
+    try {
+      const res = await fetch(route);
+      return await res.json();
+    } catch (e) {
+      return { error: e.message };
+    }
+  }));
+  grid.innerHTML = '';
+  results.forEach((item) => {
+    if (item.error) return;
+    grid.appendChild(buildLiveIndexCard(item));
+  });
+}
+
+renderIndices();
+setInterval(renderIndices, 2000);

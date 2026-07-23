@@ -1,28 +1,49 @@
-// Converts live commodity spot prices via MetalpriceAPI into practical units:
-// copper/zinc in INR per kg, crude oil (WTI) in INR per barrel.
-const KG_PER_LB = 0.45359237;
+const { getQuoteMap } = require('../getQuotes');
 
-async function fetchMetalPriceApiRate(symbol) {
-  const url = `https://api.metalpriceapi.com/v1/latest?api_key=${process.env.METALPRICEAPI_KEY}&base=${symbol}&currencies=INR`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`MetalpriceAPI request failed: ${res.status}`);
-  const data = await res.json();
-  if (data.success === false) throw new Error('MetalpriceAPI returned an error response');
-  return data.rates.INR;
+function extractDepth(q) {
+  const buy = q.depth && q.depth.buy && q.depth.buy[0] ? q.depth.buy[0].price : null;
+  const sell = q.depth && q.depth.sell && q.depth.sell[0] ? q.depth.sell[0].price : null;
+  return { bid: buy, ask: sell };
+}
+
+function buildQuote(q) {
+  const { bid, ask } = extractDepth(q);
+  return {
+    ltp: q.ltp != null ? q.ltp : null,
+    open: q.open != null ? q.open : null,
+    high: q.high != null ? q.high : null,
+    low: q.low != null ? q.low : null,
+    bid: bid,
+    ask: ask,
+    netChange: q.netChange != null ? q.netChange : null,
+    percentChange: q.percentChange != null ? q.percentChange : null,
+    expiry: q.expiry || null,
+  };
+}
+
+async function getCommodityQuote(name) {
+  const quotes = await getQuoteMap();
+  const q = quotes[name];
+  if (!q) throw new Error(`No live quote available for ${name}`);
+  return buildQuote(q);
 }
 
 async function getCopperPricePerKg() {
-  const pricePerLb = await fetchMetalPriceApiRate('XCU');
-  return pricePerLb / KG_PER_LB;
+  const quote = await getCommodityQuote('COPPER');
+  return quote.ltp;
 }
-
 async function getZincPricePerKg() {
-  const pricePerLb = await fetchMetalPriceApiRate('ZNC');
-  return pricePerLb / KG_PER_LB;
+  const quote = await getCommodityQuote('ZINC');
+  return quote.ltp;
 }
-
 async function getCrudeOilPricePerBarrel() {
-  return fetchMetalPriceApiRate('WTIOIL');
+  const quote = await getCommodityQuote('CRUDEOIL');
+  return quote.ltp;
 }
 
-module.exports = { getCopperPricePerKg, getZincPricePerKg, getCrudeOilPricePerBarrel };
+module.exports = {
+  getCopperPricePerKg,
+  getZincPricePerKg,
+  getCrudeOilPricePerBarrel,
+  getCommodityQuote,
+};
