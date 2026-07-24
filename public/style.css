@@ -887,22 +887,25 @@ img {
 @media (max-width: 480px) {
   .metals-table th,
   .metals-table td {
-    padding: 8px 5px;
-    font-size: 0.7rem;
-  }
-  .metals-table th:nth-child(5),
-  .metals-table td:nth-child(5),
-  .metals-table th:nth-child(6),
-  .metals-table td:nth-child(6) {
-    display: none;
+    padding: 6px 4px;
+    font-size: 0.62rem;
   }
   .product-cell {
-    font-size: 0.75rem;
+    font-size: 0.66rem;
   }
   .product-expiry {
     display: block;
     margin-left: 0;
-    font-size: 0.65rem;
+    font-size: 0.56rem;
+  }
+  .product-change {
+    font-size: 0.58rem;
+  }
+  .ohl-cell {
+    font-size: 0.6rem;
+  }
+  .price-cell {
+    padding: 2px 4px;
   }
 }
 .ticker-wrap {
@@ -992,4 +995,48 @@ img {
   #index-cards-grid .metal-card__change {
     font-size: 0.55rem;
   }
+}
+.contact-strip {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+.contact-strip__item {
+  flex: 1 1 260px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #142942;
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.contact-strip__icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.contact-strip__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.contact-strip__label {
+  color: #D4AF5F;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.contact-strip__value {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+@media (max-width: 480px) {
+  .contact-strip { padding: 0 1rem; gap: 0.75rem; }
+  .contact-strip__item { padding: 12px 14px; }
+  .contact-strip__value { font-size: 0.85rem; }
 }

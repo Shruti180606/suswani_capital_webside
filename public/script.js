@@ -233,8 +233,7 @@ function buildMetalRow(item) {
   const hasBidAsk = item.bid != null && item.ask != null;
 
   row.innerHTML = `
-    <td class="product-cell">${item.label}${item.expiry ? ` <span class="product-expiry">${item.expiry}</span>` : ''}<span class="product-change change--${dir}">${hasChangeData ? `${sign}${formatSigned(change)} (${sign}${pct != null ? pct.toFixed(2) : '0.00'}%)` : '—'}</span></td>
-    <td><span class="price-cell price-cell--ltp" id="ltp-${item.id}">${formatPrice(ltp)}</span></td>
+    <td class="product-cell">${item.label}${item.expiry ? ` <span class="product-expiry">${item.expiry}</span>` : ''}<span class="product-change change--${dir}">${hasChangeData ? `${formatSigned(change)} (${sign}${pct != null ? pct.toFixed(2) : '0.00'}%)` : '—'}</span></td>
     <td>${hasBidAsk ? `<span class="price-cell" id="bid-${item.id}">${formatPrice(item.bid)}</span>` : '—'}</td>
     <td>${hasBidAsk ? `<span class="price-cell" id="ask-${item.id}">${formatPrice(item.ask)}</span>` : '—'}</td>
     <td class="ohl-cell">${item.high != null ? formatPrice(item.high) : '—'}</td>
@@ -243,10 +242,8 @@ function buildMetalRow(item) {
 
   const prev = previousValues[item.id] || {};
   requestAnimationFrame(() => {
-    const ltpEl = row.querySelector(`#ltp-${item.id}`);
     const bidEl = row.querySelector(`#bid-${item.id}`);
     const askEl = row.querySelector(`#ask-${item.id}`);
-    if (prev.ltp !== undefined && prev.ltp !== ltp && ltpEl) flashBadge(ltpEl, ltp > prev.ltp ? 'up' : 'down');
     if (prev.bid !== undefined && prev.bid !== item.bid && bidEl) flashBadge(bidEl, item.bid > prev.bid ? 'up' : 'down');
     if (prev.ask !== undefined && prev.ask !== item.ask && askEl) flashBadge(askEl, item.ask > prev.ask ? 'up' : 'down');
   });
@@ -291,7 +288,7 @@ function buildLiveIndexCard(item) {
     <div class="metal-card__left">
       <div><span class="metal-card__symbol">${item.label}</span></div>
       <div class="metal-card__ltp" id="ltp-${item.id}">${formatPrice(ltp)}</div>
-      <div class="metal-card__change metal-card__change--${dir}">${hasChangeData ? `${sign}${formatSigned(change)} (${sign}${pct != null ? pct.toFixed(2) : '0.00'}%)` : '—'}</div>
+      <div class="metal-card__change metal-card__change--${dir}">${hasChangeData ? `${formatSigned(change)} (${sign}${pct != null ? pct.toFixed(2) : '0.00'}%)` : '—'}</div>
     </div>
     <div class="metal-card__right">
       <div class="metal-card__ohl">O:${formatPrice(item.open)} H:${formatPrice(item.high)} L:${formatPrice(item.low)}</div>
@@ -302,7 +299,6 @@ function buildLiveIndexCard(item) {
   const prev = previousValues[item.id] || {};
   requestAnimationFrame(() => {
     const ltpEl = card.querySelector(`#ltp-${item.id}`);
-    if (prev.ltp !== undefined && prev.ltp !== ltp && ltpEl) flashBadge(ltpEl, ltp > prev.ltp ? 'up' : 'down');
   });
   previousValues[item.id] = { ltp };
 
