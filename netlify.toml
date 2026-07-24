@@ -5,5 +5,5 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "http://200.141.2.52:8888/api/:splat"
+  to =" http://200.141.2.52/api/:splat"
   status = 200
