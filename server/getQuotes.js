@@ -9,7 +9,7 @@ const FIXED_INSTRUMENTS = [
 ];
 const COMMODITY_MAP = {
   GOLD: 'GOLD',
-  SILVER: 'SILVERM',
+  SILVER: 'SILVER',
   CRUDEOIL: 'CRUDEOIL',
   COPPER: 'COPPER',
   ZINC: 'ZINC'
@@ -69,8 +69,25 @@ async function getQuoteMap() {
   if (cachedQuotes && (now - cacheTime) < CACHE_TTL_MS) {
     return cachedQuotes;
   }
-  cachedQuotes = await fetchQuotesFromApi();
-  cacheTime = now;
-  return cachedQuotes;
+  try {
+    cachedQuotes = await fetchQuotesFromApi();
+    cacheTime = now;
+    return cachedQuotes;
+  } catch (err) {
+    console.error('[getQuotes] First attempt failed:', err.message);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      cachedQuotes = await fetchQuotesFromApi();
+      cacheTime = now;
+      return cachedQuotes;
+    } catch (retryErr) {
+      console.error('[getQuotes] Retry also failed:', retryErr.message);
+      if (cachedQuotes) {
+        console.warn('[getQuotes] Serving last-known-good cached quotes instead');
+        return cachedQuotes;
+      }
+      throw retryErr;
+    }
+  }
 }
 module.exports = { getQuoteMap };

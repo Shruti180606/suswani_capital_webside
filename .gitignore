@@ -2,3 +2,11 @@ node_modules/
 .env
 .netlify/
 .claude/settings.local.json
+*.bak
+*.bak2
+*.bak3
+*.bak4
+server/test-*.js
+server/update-instruments.log
+server/instruments.json
+shared/instruments.json

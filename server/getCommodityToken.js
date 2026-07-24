@@ -28,8 +28,7 @@ function getNearestContract(symbolPrefix) {
   const matches = list.filter(item =>
     item.exch_seg === 'MCX' &&
     item.instrumenttype === 'FUTCOM' &&
-    item.symbol.startsWith(symbolPrefix) &&
-    /^\d/.test(item.symbol.slice(symbolPrefix.length))
+    item.name === symbolPrefix
   );
 
   const withExpiry = matches
