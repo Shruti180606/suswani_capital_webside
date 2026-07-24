@@ -9,4 +9,4 @@ node_modules/
 server/test-*.js
 server/update-instruments.log
 server/instruments.json
-shared/instruments.json
+
